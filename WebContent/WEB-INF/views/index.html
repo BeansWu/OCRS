@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/index.css">
+<title>我的主页</title>
+</head>
+<body>
+  <!-- head -->
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="h2">在线聊天室</div>
+        </div>
+        <div class="col-md-2 col-md-offset-6">
+          <p id="welcome" class="h5">欢迎登陆，用户</p>
+        </div>
+      </div><!-- row -->
+    </div><!-- panel-heading -->
+  </div><!-- panel -->
+  
+  <!-- primary -->
+  <div class="col-md-6 col-md-offset-2 panel panel-warning">
+    <div class="panel panel-heading"></div>
+    <!-- 消息内容 -->
+  	<div id="messageContents" class="panel-body">
+      <!-- <div class="alert alert-info" role="alert"><p class="text-left"><strong>Andrew</strong><br>夕阳无限好</p></div>
+      <div class="alert alert-info" role="alert"><p class="text-right"><strong>Sam</strong><br>只是近黄昏</p></div>  -->
+  	</div>
+  	<!-- 输入框 -->
+    <div class="panel panel-heading">
+  	  <!-- <form method="post"> -->
+  	    <div class="form-group">
+  	      <textarea id="content" class="form-control" rows="3" autofocus="autofocus" placeholder="请输入聊天内容"></textarea>
+  	    </div>
+  	    <div class="form-group">
+  		  <button id="send" type="submit" class="btn btn-primary col-md-offset-11">发送</button>
+  	  	</div>
+  	  <!-- </form> -->
+    </div>
+  </div>
+  <!-- 在线人员 -->
+  <div class="col-md-1 panel panel-info">
+  	<div class="panel-heading"><small>当前在线</small></div>
+  	<div id="onlineUserInfo" class="panel-body"></div>
+  </div>
+  
+  <script type="text/javascript" src="../script/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="../script/chat.js"></script>
+</body>
+</html>

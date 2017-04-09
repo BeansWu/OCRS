@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- 自动扫描的包 -->
+	<context:component-scan base-package="ocrs.entity"></context:component-scan>
+	<context:component-scan base-package="ocrs.dao"></context:component-scan>
+	<context:component-scan base-package="ocrs.service"></context:component-scan>
+	<context:component-scan base-package="ocrs.util"></context:component-scan>
+	
+	<!-- 引入数据库配置文件 -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="user" value="${user}"></property>
+		<property name="password" value="${password}"></property>
+		<property name="driverClass" value="${driverClass}"></property>
+		<property name="jdbcUrl" value="${url}"></property>
+		<property name="initialPoolSize" value="${initialPoolSize}"></property>
+		<property name="maxPoolSize" value="${maxPoolSize}"></property>
+	</bean>
+	 
+	<!-- session 工厂 -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+		<property name="dataSource" ref="dataSource"></property>
+		<!-- 扫描通过注解配置的 hibernate 类 -->
+		<property name="packagesToScan">
+			<list>
+				<value>ocrs.entity</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<!-- 声明使用注解式事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- 配置 Service, DAO 的事务 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="read*" read-only="true"/>
+			<tx:method name="find*" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 配置事务切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* ocrs.dao.*.*(..)) or execution(* ocrs.service.*.*(..))" id="pointcut"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut"/>
+	</aop:config>
+</beans>

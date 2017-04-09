@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/login.css">
+<title>在线聊天室</title>
+</head>
+<body>
+  <div class="h1 head">在线聊天系统</div>
+  
+  <div class="container">
+    <div class="panel panel-primary">
+      <div class="panel-heading"><h3 class="panel-title">用户登陆</h3></div>
+        <div class="panel body">
+          <form class="form-signin" name="logForm" method="post">
+            <div class="input-group">
+              <input type="text" name="username" class="form-control" placeholder="用户名" required autofocus>
+            </div>
+            <div class="input-group">
+              <input type="password" name="password" class="form-control" placeholder="密码" required autofocus>
+            </div>
+            <br>
+            <div class="submit">
+              <div class="login">
+                <button class="btn btn-primary" type="submit">&nbsp;&nbsp;登陆&nbsp;&nbsp;</button>
+              </div>
+              <div class="reset">
+                <button class="btn btn-warning" type="reset">&nbsp;&nbsp;重置&nbsp;&nbsp;</button>
+              </div>
+              <div class="register">
+                <a id="toRegister" href="#">注册</a>
+              </div>
+            </div>
+          </form><!-- form-signin -->
+        </div><!-- div panel body -->
+      </div><!-- div panel -->
+  </div><!-- div container -->
+  
+  <div class="copyright">@2017 Powered by Andrew</div>
+  
+<script type="text/javascript" src="script/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="script/loginCheck.js"></script>
+</body>
+</html>
