@@ -9,8 +9,10 @@ $(function (){
 				$.post(url, {username : username, password : password}, function (data) {
 					if (data == "0") {
 						alert("用户名或者密码错误");
-					}  else {
-						window.location.href = "user/login";
+					} else if (data == "1") {
+						alert("用户已登录！");
+					} else {
+						window.location.href = "user/index";
 					}
 				})
 			} else {

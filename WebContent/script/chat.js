@@ -1,5 +1,5 @@
 $(function () {
-	var username;
+	var username = "";
 	//默认为刷新消息内容操作
 	var url = "update";
 	//登陆信息
@@ -54,22 +54,37 @@ $(function () {
 		}
 	}
 	
+	
 	//输入聊天内容后局部刷新聊天内容
 	$("#send").click(function () {
-		url = "chat";
-		getMessageContents();
-		url = "update";
+		if (username != "") {
+			url = "chat";
+			getMessageContents();
+			url = "update";
+		} else {
+			//亡羊补牢之举，若未登录就通过 uri（*/user/index） 进入，则进行任何操作都会返回登陆页面
+			window.location.href="login";
+		}
 	})
-	//定时刷新消息内容
-	window.setInterval(getMessageContents, 1000);
 	
-	//定时刷新在线人员信息
-	window.setInterval(function() {
+	window.setInterval(function () {
+		$.get("getUserInfo", {"time" : new Date()}, function (data) {
+			username = data.username;
+		}, "json")
+		//防止直接输入 uri 后由于 js向后台请求数据无果，返回的乱七八糟的数据
+		if (username == "") {
+			//亡羊补牢之举，若未登录就通过 uri（*/user/index） 进入，则进行任何操作都会返回登陆页面
+			window.location.href="login";
+		}
+		//定时刷新消息内容
+		getMessageContents();
+		//定时刷新在线人员信息
 		$.get("updateOnlineUserInfo", function (data) {
 			$("#onlineUserInfo").find("div").remove();
 			for (var i = 0; i < data.length; i++) {
 				$("#onlineUserInfo").append("<div class='text-success'>" + data[i] + "</div>");
 			}
 		})
-	}, 1000)
+	}, 100);
+
 })

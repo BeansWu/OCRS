@@ -30,7 +30,7 @@ $(function () {
 							$.blockUI({ message: '<h4>注册成功，将在5秒后跳转到聊天室！</h3>' });
 							setTimeout($.unblockUI, 5000);
 							//5秒后跳转
-							setTimeout("window.location.href='login'", 5000);
+							setTimeout("window.location.href='index'", 5000);
 						}
 					})
 				} else {

@@ -40,31 +40,39 @@ public class UserManagerController {
 	@RequestMapping(value = "/loginCheck", method = RequestMethod.POST)
 	public int loginCheck (String username, String password, HttpServletRequest request) throws IOException {
 		User user = userService.loginCheck(username, password);
+		//从 servletContext 获取用户名的集合
+		@SuppressWarnings("unchecked")
+		List<String> usernames = (List<String>) request.getServletContext().getAttribute("usernames");
 		int result;
 		if (user == null || !password.equals(user.getPassword())) {
 			result = 0;
 		} else {
-			result = 1;
-			request.getSession().setAttribute("user", user);
-			//从 servletContext 获取用户名的集合
-			@SuppressWarnings("unchecked")
-			List<String> usernames = (List<String>) request.getServletContext().getAttribute("usernames");
-			if (usernames == null) {
-				//若用户名集合不存在则新建
-				usernames = new ArrayList<String>();
+			User userTemp = (User) request.getSession().getAttribute("user");
+			//防止用户重复登陆
+			if (userTemp != null && username.equals(userTemp.getUsername())) {
+				result = 1;
+			} else if(usernames != null && usernames.contains(username)) {
+				result = 1;
+			} else {
+				result = 2;
+				request.getSession().setAttribute("user", user);
+				if (usernames == null) {
+					//若用户名集合不存在则新建
+					usernames = new ArrayList<String>();
+				}
+				//添加新登陆的用户名到集合
+				if (!usernames.contains(username)) {
+					usernames.add(username);
+				}
+				//更新 servletContext 中的用户名集合
+				request.getServletContext().setAttribute("usernames", usernames);
 			}
-			//添加新登陆的用户名到集合
-			if (!usernames.contains(username)) {
-				usernames.add(username);
-			}
-			//更新 servletContext 中的用户名集合
-			request.getServletContext().setAttribute("usernames", usernames);
 		}
 		return result;
 	}
 	
 	//登陆
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView login (HttpServletRequest request) {
 		ModelAndView modelAdnView = new ModelAndView("index");
 		return modelAdnView;
@@ -183,10 +191,17 @@ public class UserManagerController {
 		//将 session 中的用户对象清除
 		User user = (User) request.getSession().getAttribute("user");
 		String username = user.getUsername();
+		request.getSession().removeAttribute("user");
 		//获得全局变量中的用户名集合
 		@SuppressWarnings("unchecked")
 		List<String> usernames = (List<String>) request.getServletContext().getAttribute("usernames");
 		usernames.remove(username);
+		response.sendRedirect(request.getContextPath() + "/login.html");
+	}
+	
+	//直接通过 uri 访问时跳转到登陆页面
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public void returnToLogin (HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.sendRedirect(request.getContextPath() + "/login.html");
 	}
 }
