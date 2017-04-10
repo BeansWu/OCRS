@@ -1,7 +1,6 @@
 package ocrs.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,10 +55,6 @@ public class UserManagerController {
 			} else {
 				result = 2;
 				request.getSession().setAttribute("user", user);
-				if (usernames == null) {
-					//若用户名集合不存在则新建
-					usernames = new ArrayList<String>();
-				}
 				//添加新登陆的用户名到集合
 				if (!usernames.contains(username)) {
 					usernames.add(username);
@@ -103,10 +98,6 @@ public class UserManagerController {
 		//获得全局变量中的消息记录集合
 		@SuppressWarnings("unchecked")
 		List<MessageRecordTransform> messageRecords = (List<MessageRecordTransform>) request.getServletContext().getAttribute("messageRecords");
-		//若不存在则新建
-		if (messageRecords == null) {
-			messageRecords = new ArrayList<MessageRecordTransform>();
-		}
 		//添加新的消息记录
 		messageRecords.add(messageRecordTransform);
 		//将更新后的消息记录集合再保存到 servletContext 中
@@ -121,10 +112,6 @@ public class UserManagerController {
 		//获得全局变量中的消息记录集合
 		@SuppressWarnings("unchecked")
 		List<MessageRecordTransform> messageRecords = (List<MessageRecordTransform>) request.getServletContext().getAttribute("messageRecords");
-		//若不存在则新建
-		if (messageRecords == null) {
-			messageRecords = new ArrayList<MessageRecordTransform>();
-		}
 		return messageRecords;
 	}
 	
@@ -172,10 +159,6 @@ public class UserManagerController {
 		//从 servletContext 获取用户名的集合
 		@SuppressWarnings("unchecked")
 		List<String> usernames = (List<String>) request.getServletContext().getAttribute("usernames");
-		if (usernames == null) {
-			//若用户名集合不存在则新建
-			usernames = new ArrayList<String>();
-		}
 		//添加新登陆的用户名到集合
 		if (!usernames.contains(username)) {
 			usernames.add(username);
